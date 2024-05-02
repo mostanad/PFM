@@ -1,0 +1,140 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.4                                   |
+|   \\  /    A nd           | Web:      http://www.openfoam.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+
+    root            "";
+    case            "";
+    instance        "";
+    local           "";
+
+    class           dictionary;
+    object          couplingProperties;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+//===========================================================================//
+// sub-models & settings
+
+//skipFlowSol;
+//verbose;
+
+modelType B; // A or B
+
+couplingInterval 100;
+
+voidFractionModel dividedMS;
+
+locateModel engine;
+
+meshMotionModel noMeshMotion;
+
+regionModel allRegion;
+
+IOModel basicIO;
+
+probeModel off;
+
+dataExchangeModel twoWayMPI;//twoWayFiles;//oneWayVTK;//
+
+averagingModel dense;
+
+clockModel off;
+
+smoothingModel off;// constDiffSmoothing; //
+
+forceModels
+(
+    Archimedes
+    //volWeightedAverage
+);
+
+forceModelsMS
+(
+     DiFeliceDragMS
+    //GidaspowDragMS
+);
+
+momCoupleModels
+(
+    implicitCouple
+);
+
+turbulenceModelType "turbulenceProperties";
+
+//===========================================================================//
+// sub-model properties
+
+implicitCoupleProps
+{
+    velFieldName "U";
+    granVelFieldName "Us";
+    voidfractionFieldName "voidfraction";
+}
+
+dividedProps
+{
+    alphaMin 0.1;
+    scaleUpVol 1.0;
+}
+
+volWeightedAverageProps
+{
+    scalarFieldNames
+    (
+        voidfraction
+    );
+    vectorFieldNames
+    (
+    );
+    upperThreshold 0.999;
+    lowerThreshold 0;
+    //verbose;
+}
+
+DiFeliceDragMSProps
+{
+    velFieldName "U";
+    voidfractionFieldName "voidfraction";
+    granVelFieldName "Us";
+    verbose true;
+    manDHdev true;
+    dHbyV
+    (
+        1084200. // d of sphere of equal area by clump volume
+    ); 
+}
+
+GidaspowDragMSProps
+{
+    velFieldName "U";
+    voidfractionFieldName "voidfraction";
+    hydraulicDiameter 0.002;
+}
+
+ArchimedesProps
+{
+    gravityFieldName "g";
+}
+
+engineProps
+{
+    treeSearch true;
+}
+
+twoWayMPIProps
+{
+    maxNumberOfParticles 101000;
+    liggghtsPath "../DEM/in.liggghts_resume";
+}
+// ************************************************************************* //

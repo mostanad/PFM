@@ -1,0 +1,60 @@
+"CFDEMproject Website"_lws - "Main Page"_main :c
+
+:link(lws,http://www.cfdem.com)
+:link(main,CFDEMcoupling_Manual.html)
+
+:line
+
+forceModel virtualMassForce command :h3
+
+[Syntax:]
+
+Defined in "couplingProperties"_CFDEMcoupling_dicts.html#couplingProperties
+dictionary.
+
+forceModels
+(
+    virtualMassForce
+);
+virtualMassForceProps
+\{
+    velFieldName "U";
+    phiFieldName "phi";
+    splitUrelCalculation switch1;
+    Cadd scalar1;
+    treatForceExplicit switch2;
+    interpolation switch3;
+\} :pre
+
+{U} = name of the finite volume fluid velocity field :ulb,l
+{phi} = name of the finite volume flux field :l
+{switch1} = (optional, default false) indicator to split calculation of Urel between CFDEM and LIGGGHTS :l
+{scalar1} = (optional, default 0.5) virtual mass coefficient :l
+{switch2} = (optional, default true) sub model switch, see "forceSubModel"_forceSubModel.html for details :l
+{switch3} = (optional, default false) sub model switch, see "forceSubModel"_forceSubModel.html for details :l
+:ule
+
+[Examples:]
+
+forceModels
+(
+    virtualMassForce
+);
+virtualMassForceProps
+\{
+    velFieldName "U";
+    phiFieldName "phi";
+\} :pre
+
+[Description:]
+
+The force model performs the calculation of forces (e.g. fluid-particle
+interaction forces) acting on each DEM particle. The {virtualMassForce} model
+calculates the virtual mass force for each particle.
+
+IMPORTANT NOTE: Model not validated!
+
+[Related commands:]
+
+"forceModel"_forceModel.html
+
